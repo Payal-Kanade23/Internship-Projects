@@ -1,0 +1,115 @@
+import React, { useState } from 'react';
+
+function GameBoard() {
+    let gameValue = [
+        [null,null,null],
+        [null,null,null],
+        [null,null,null]
+    ]
+    const [winner , setWinner] = useState(null);
+    const [activeUser , setActiveUser] = useState("X");
+    const [board , setBoard] = useState(gameValue);
+    const [tie , setTie] =useState(false) ; 
+
+    const handleClick = (row , col)=>{
+        if(winner) return;
+        
+        if(board[row][col] !== null) return;
+      console.log("row:",row)
+      console.log("col:",col)  
+      setBoard((prev)=>{
+        const updatedBoard =  [...prev.map((item)=>[...item])]
+        updatedBoard[row][col] = activeUser;
+       
+        const result = calcWin(updatedBoard)
+        if(result){
+            setWinner(result)
+            
+        }else {
+        const isTie = updatedBoard.every((row) =>
+            row.every((cell) => cell !== null)
+        );
+
+        if (isTie) {
+            setTie(true);
+        }
+    }
+        
+        return updatedBoard;
+      })
+
+              setActiveUser((prev) => prev === "X" ? "O" :"X")
+
+      
+   
+    }
+  
+    const calcWin = (board) => {
+        const winCond = [
+  [[0,0],[0,1],[0,2]],
+  [[1,0],[1,1],[1,2]],
+  [[2,0],[2,1],[2,2]],
+
+  [[0,0],[1,0],[2,0]],
+  [[0,1],[1,1],[2,1]],
+  [[0,2],[1,2],[2,2]],
+
+  [[0,0],[1,1],[2,2]],
+  [[0,2],[1,1],[2,0]],
+];
+    for (const [[r1,c1],[r2,c2],[r3,c3]] of winCond) {
+        if (
+            board[r1][c1] &&
+            board[r1][c1] === board[r2][c2] &&
+            board[r2][c2] === board[r3][c3]
+        ){ 
+            return board[r1][c1];
+        
+    }
+   
+    
+};
+
+    const handleReset = () =>{
+       setBoard([
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+    ]);
+
+    setActiveUser("X");
+    setWinner(null);
+    setTie(false);
+    }
+  return (
+    <>
+    <h1>Current User : {activeUser}</h1>
+    <ol className='outer'>
+        {board.map((row,row_index)=>(
+            <li key={row_index} >
+                <ol className='inner'>
+                    {row.map((elt , col_index)=>(
+                        <li className='inner-item' key={`${row_index}-${col_index}`}  onClick={()=>handleClick(row_index , col_index)}>{elt}</li>
+                    ))}
+                </ol>
+            </li>
+        ))}
+    </ol>
+    {winner && (
+        <div>
+              <p>Winner is {winner}</p> 
+              <button onClick={handleReset}>Reset Game</button>
+        </div>
+       )}
+    {tie && (
+        <div>
+            <p>Game is tied</p>
+            <button onClick={handleReset}>Reset Game</button>
+        </div>
+    )}
+    </>
+  );
+}
+}
+
+export default GameBoard;
