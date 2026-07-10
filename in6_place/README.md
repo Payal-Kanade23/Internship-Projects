@@ -1,16 +1,83 @@
-# React + Vite
+# Places Picker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React app for browsing available places, picking your favorites, and removing them with a confirmation modal.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Browse a list of available places
+- Pick places to add them to your selected list
+- Remove a selected place, with a confirmation dialog before deleting
+- Modal built on the native `<dialog>` element, rendered via a React portal
+- Styled with Tailwind CSS
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- [React](https://react.dev/) (Vite)
+- [Tailwind CSS](https://tailwindcss.com/)
+- Native `<dialog>` element for the confirmation modal
 
-## Expanding the ESLint configuration
+## Project Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```
+src/
+├── App.jsx              # Root component, holds selected/available place state
+├── Header.jsx            # App header
+├── AvailablePlace.jsx     # Grid of places you can pick
+├── SelectedPlace.jsx      # Grid of places you've already picked
+├── Model.jsx             # Modal component (dialog + portal), controlled via ref
+├── data.js               # Static place data
+└── assets/                # Images and static assets
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or later recommended)
+- npm
+
+### Installation
+
+```bash
+git clone <your-repo-url>
+cd <project-folder>
+npm install
+```
+
+### Running the app
+
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:5173` (default Vite port).
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Preview production build
+
+```bash
+npm run preview
+```
+
+## How It Works
+
+1. **Picking a place** — Clicking a place in `AvailablePlace` adds it to `selectedPlace` state in `App.jsx` (skips duplicates).
+2. **Removing a place** — Clicking a place in `SelectedPlace` opens the confirmation modal via a ref (`model.current.open()`).
+3. **Confirming removal** — Clicking "Yes" in the modal removes the place from state and closes the modal; "No" just closes it.
+
+## Important Setup Note
+
+The `Model` component portals into a DOM node with `id="model"`. Make sure this element exists in your `index.html`:
+
+```html
+<div id="model"></div>
+```
+
+## License
+
+MIT (update as needed)
