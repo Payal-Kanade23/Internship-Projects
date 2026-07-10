@@ -78,6 +78,3 @@ The `Model` component portals into a DOM node with `id="model"`. Make sure this 
 <div id="model"></div>
 ```
 
-## License
-
-MIT (update as needed)
